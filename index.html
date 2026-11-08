@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allama Iqbal Tribute Space</title>
+    <style>
+        :root {
+            --bg-color: #0b1511;
+            --card-bg: rgba(20, 36, 29, 0.9);
+            --text-color: #e4ebe7;
+            --primary-accent: #00ffaa;
+            --secondary-accent: #17b880;
+            --text-muted: #8aa397;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+        #fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+        header {
+            background: linear-gradient(180deg, rgba(23, 184, 128, 0.15) 0%, transparent 100%);
+            text-align: center;
+            padding: 40px 20px 30px;
+            position: relative;
+        }
+        .top-banner {
+            display: block;
+            width: 166px;
+            height: 166px;
+            max-width: 70vw;
+            max-height: 70vw;
+            object-fit: cover;
+            border: 3px solid var(--primary-accent);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 12px var(--primary-accent), 0 0 30px rgba(0, 255, 170, 0.45), inset 0 0 12px rgba(0, 255, 170, 0.2);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(0, 255, 170, 0.4);
+        }
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin: 10px 0 0px;
+        }
+        .creator-tag {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: var(--primary-accent);
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.3);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+            position: relative;
+        }
+        .card {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(8px);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(23, 184, 128, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 255, 170, 0.1);
+            border-color: rgba(0, 255, 170, 0.3);
+        }
+        h2 {
+            color: var(--primary-accent);
+            margin-top: 0;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .poetry-box {
+            background: rgba(0,0,0,0.15);
+            border-right: 4px solid var(--primary-accent);
+            padding: 25px;
+            font-family: 'Urdu Typesetting', 'Jonameh', 'Noto Nastaliq Urdu', 'Segoe UI', serif;
+            text-align: center;
+            font-size: 1.6rem;
+            margin: 25px 0;
+            border-radius: 8px 0 0 8px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+            direction: rtl;
+        }
+        .btn-action {
+            display: block;
+            width: 220px;
+            margin: 0 auto;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            color: #0b1511;
+            font-weight: bold;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 255, 170, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-action:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(0, 255, 170, 0.4);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(23, 184, 128, 0.1);
+            display: flex;
+            align-items: flex-start;
+        }
+        li::before {
+            content: "✦";
+            color: var(--primary-accent);
+            margin-right: 12px;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            border-top: 1px solid rgba(23, 184, 128, 0.05);
+        }
+        footer span {
+            color: var(--primary-accent);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fireworks-canvas"></canvas>
+
+    <header>
+        <img src="https://i.pinimg.com/474x/83/55/c3/8355c3a8be5589a2f21b2291b1e6b202.jpg" alt="Allama Iqbal" class="top-banner">
+        <h1>Dr. Allama Muhammad Iqbal</h1>
+        <p>Celebrating the Legacy of Shair-e-Mashriq (9th November)</p>
+    </header>
+
+    <div class="creator-tag">
+        CREATED BY Hk HUSNAIN
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>🦅 The Visionary Strategy</h2>
+            <p>Born on <strong>November 9, 1877</strong>, in Sialkot, Dr. Allama Iqbal was a premium philosopher, global poet, and critical political thinker. His powerful conceptual framework re-energized the Muslim world with deeper spiritual and intellectual insight, calling for self-awareness, dignity, and collective renewal. He remains a timeless symbol of courage, knowledge, and cultural pride.</p>
+        </div>
+
+        <div class="card">
+            <h2>✍️ Sparks of Khudi (Selfhood)</h2>
+            <div class="poetry-box" id="poetry-display">
+                خودی کو کر بلند اتنا کہ ہر تقدیر سے پہلے<br>
+                خدا بندے سے خود پوچھے بتا تیری رضا کیا ہے
+            </div>
+            <button class="btn-action" onclick="changePoetry()">Next Cosmic Verse</button>
+        </div>
+
+        <div class="card">
+            <h2>📚 Historic Landmarks</h2>
+            <ul>
+                <li><strong>Ultimate Titles:</strong> Shair-e-Mashriq (Poet of the East), Hakeem-ul-Ummat.</li>
+                <li><strong>Literary masterpieces:</strong> Bang-e-Dara, Bal-e-Jibril, Zarb-e-Kaleem, Javid Nama.</li>
+                <li><strong>National Honor:</strong> November 9th stands as a regular public holiday across Pakistan to protect and remember his legacy.</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>Created with ❤️ by <span>Hk HUSNAIN</span> | Interactive Tribute Canvas</p>
+    </footer>
+
+    <script>
+        const verses = [
+            "خودی کو کر بلند اتنا کہ ہر تقدیر سے پہلے<br>خدا بندے سے خود پوچھے بتا تیری رضا کیا ہے",
+            "نہیں تیرا نشیمن قصر-سلطانی کے گنبد پر<br>تو شاہیں ہے ، بسیرا کر پہاڑوں کی چٹانوں میں",
+            "ستاروں سے آگے جہاں اور بھی ہیں<br>ابھی عشق کے امتحاں اور بھی ہیں",
+            "تو قادر و عادل ہے مگر تیرے جہاں میں<br>ہیں تلخ بہت بندہِ مزدور کے اوقات"
+        ];
+        let currentIndex = 0;
+
+        function changePoetry() {
+            const display = document.getElementById('poetry-display');
+            display.style.opacity = 0;
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % verses.length;
+                display.innerHTML = verses[currentIndex];
+                display.style.opacity = 1;
+            }, 250);
+        }
+
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 4.5 + 1;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.015 + 0.015;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.04;
+                this.alpha -= this.decay;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function createFirework() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * (canvas.height * 0.6);
+            const colors = ['#00ffaa', '#17b880', '#00e5ff', '#ff007f', '#ffea00'];
+            const chosenColor = colors[Math.floor(Math.random() * colors.length)];
+            for (let i = 0; i < 70; i++) {
+                particles.push(new Particle(x, y, chosenColor));
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (Math.random() < 0.07) { createFirework(); }
+            particles = particles.filter(p => p.alpha > 0);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+
+</body>
+</html>
